@@ -51,7 +51,7 @@ class LinkedInAutomator:
 
     async def go_to_feed(self):
         print("Navigating to LinkedIn feed...")
-        await self.page.goto("https://www.linkedin.com/feed/", wait_until="load", timeout=60000)
+        await self.page.goto("https://www.linkedin.com/feed/", wait_until="load", timeout=120000)
         await asyncio.sleep(3)
 
     async def scroll_and_scrape_posts(self, max_posts: int) -> List[Dict[str, Any]]:
