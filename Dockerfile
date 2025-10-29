@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgtk-3-0 \
     libgraphene-1.0-0 \
     libgstreamer-gl1.0-0 \
-    gstreamer1.0-codecparsers \
+    gstreamer1.0-plugins-good \ # <--- Corrected this line
     libenchant-2-2 \
     libsecret-1-0 \
     libmanette-0.2-0 \
