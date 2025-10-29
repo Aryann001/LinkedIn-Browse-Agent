@@ -1,0 +1,10 @@
+.env
+venv
+__pycache__
+config/__pycache__
+controllers/__pycache__
+models/__pycache__
+routers/__pycache__
+utils/__pycache__
+fix_cookies.py
+linkedin_cookies.json
