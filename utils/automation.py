@@ -51,8 +51,32 @@ class LinkedInAutomator:
 
     async def go_to_feed(self):
         print("Navigating to LinkedIn feed...")
-        await self.page.goto("https://www.linkedin.com/feed/", wait_until="load", timeout=300000)
-        await asyncio.sleep(3)
+        try:
+            # Increase timeout to 90 seconds for slow servers
+            await self.page.goto("https://www.linkedin.com/feed/", wait_until="networkidle", timeout=90000)
+        except Exception as e:
+            # If goto fails, raise a specific error
+            print(f"Page.goto failed: {e}")
+            raise Exception("Failed to load LinkedIn feed, server may be slow or page timed out. Try again.")
+
+        # Give the page a moment to settle after network is "idle"
+        await asyncio.sleep(3) 
+
+        # --- NEW LOGIN CHECK ---
+        # Check if the URL is still the feed. If we were redirected
+        # to a login or checkpoint, the URL will be different.
+        current_url = self.page.url
+        print(f"Current page URL: {current_url}")
+
+        if "linkedin.com/feed" not in current_url:
+            if "login" in current_url:
+                raise Exception("Login failed. Cookies are invalid or expired. Please re-export new cookies.")
+            if "checkpoint" in current_url or "challenge" in current_url:
+                raise Exception("Login failed. LinkedIn is asking for a security check. Please re-export new cookies.")
+            else:
+                raise Exception(f"Login failed. Redirected to unknown page: {current_url}. Please re-export cookies.")
+        
+        print("Login successful, on feed page.")
 
     async def scroll_and_scrape_posts(self, max_posts: int) -> List[Dict[str, Any]]:
         selectors = await self.fetch_selectors() # <-- GET SELECTORS
