@@ -29,7 +29,7 @@ class LinkedInAutomator:
 
     async def __aenter__(self):
         playwright = await async_playwright().start()
-        self.browser = await playwright.chromium.launch(headless=True, slow_mo=500)
+        self.browser = await playwright.chromium.launch(headless=False, slow_mo=500)
         self.context = await self.browser.new_context()
         
         try:
@@ -51,7 +51,7 @@ class LinkedInAutomator:
 
     async def go_to_feed(self):
         print("Navigating to LinkedIn feed...")
-        await self.page.goto("https://www.linkedin.com/feed/", wait_until="load", timeout=180000)
+        await self.page.goto("https://www.linkedin.com/feed/", wait_until="load", timeout=240000)
         await asyncio.sleep(3)
 
     async def scroll_and_scrape_posts(self, max_posts: int) -> List[Dict[str, Any]]:
